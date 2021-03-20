@@ -11,54 +11,55 @@ import {
   makeStyles,
   MenuItem,
   Select,
-  Theme,
+  Table,
   Typography,
-} from "@material-ui/core";
-import { useEffect, useState } from "react";
+} from '@material-ui/core';
+import { useEffect, useState } from 'react';
 
 export default function App() {
   const classes = useStyles();
   const [list, setList] = useState([]);
-  const [filter, setFilter] = useState("");
-  const [resort, setResort] = useState("");
+  const [sources, setSources] = useState([]);
+  const [filter, setFilter] = useState('');
+  const [resort, setResort] = useState('');
 
   const resorts = [
-    "Animal Kingdom",
-    "Bay Lake Tower",
-    "Aulani Resort",
-    "Beach Club Villas",
-    "Boardwalk Villas",
-    "Copper Creek",
-    "Grand Californian Hotel & Spa",
-    "Old Key West",
-    "Saratoga Springs",
-    "Vero Beach",
-    "Boulder Ridge Villas",
-    "Polynesian Villas and Bungalows",
-    "Hilton Head",
-    "Riviera Resort",
+    'Animal Kingdom',
+    'Bay Lake Tower',
+    'Aulani Resort',
+    'Beach Club Villas',
+    'Boardwalk Villas',
+    'Copper Creek',
+    'Grand Californian Hotel & Spa',
+    'Old Key West',
+    'Saratoga Springs',
+    'Vero Beach',
+    'Boulder Ridge Villas',
+    'Polynesian Villas and Bungalows',
+    'Hilton Head',
+    'Riviera Resort',
   ];
 
   const useYear = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
 
   useEffect(() => {
-    fetch("http://localhost:5150/listing", {
-      method: "get",
+    fetch('http://localhost:5150/listing', {
+      method: 'get',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     })
       .catch((error) => {
@@ -68,7 +69,23 @@ export default function App() {
       .then((json) => {
         setList(json);
       });
+
+    fetch('http://localhost:5150/source', {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .catch((error) => {
+        console.log(error);
+      })
+      .then((res) => res.json())
+      .then((json) => {
+        setSources(json);
+      });
   }, []);
+
+  console.log(sources);
 
   return (
     <Container maxWidth="xl">
@@ -114,7 +131,7 @@ export default function App() {
                 if (!resort) {
                   return true;
                 }
-                return r.resort.split("-")[0].trim() === resort;
+                return r.resort.split('-')[0].trim() === resort;
               })
               .filter((l) => {
                 if (!filter) {
@@ -123,21 +140,20 @@ export default function App() {
                 return l.useYear.trim() === filter;
               })
               .map((listing, i) => {
-                console.log("listing", listing);
                 return (
                   <ListItem>
                     <ListItemText
-                      primary={listing.resort.split("-")[0].trim()}
+                      primary={listing.resort.split('-')[0].trim()}
                       secondary={
                         <>
                           <Typography component="span" variant="subtitle1">
                             {listing.useYear}
                           </Typography>
-                          {" | "}
+                          {' | '}
                           <Typography component="span" variant="body1">
                             {listing.price}
                           </Typography>
-                          {" | "}
+                          {' | '}
                           <Typography component="span" variant="body1">
                             {listing.points}
                           </Typography>
