@@ -85,8 +85,6 @@ export default function App() {
       });
   }, []);
 
-  console.log(sources);
-
   return (
     <Container maxWidth="xl">
       <Grid container>
@@ -102,7 +100,9 @@ export default function App() {
                 <em>None</em>
               </MenuItem>
               {resorts.map((resort) => (
-                <MenuItem value={resort}>{resort}</MenuItem>
+                <MenuItem key={resort} value={resort}>
+                  {resort}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -117,7 +117,9 @@ export default function App() {
                 <em>None</em>
               </MenuItem>
               {useYear.map((year) => (
-                <MenuItem value={year}>{year}</MenuItem>
+                <MenuItem key={year} value={year}>
+                  {year}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -131,7 +133,7 @@ export default function App() {
                 if (!resort) {
                   return true;
                 }
-                return r.resort.split('-')[0].trim() === resort;
+                return r.name.split('-')[0].trim() === resort;
               })
               .filter((l) => {
                 if (!filter) {
@@ -141,9 +143,9 @@ export default function App() {
               })
               .map((listing, i) => {
                 return (
-                  <ListItem>
+                  <ListItem key={listing.id}>
                     <ListItemText
-                      primary={listing.resort.split('-')[0].trim()}
+                      primary={listing.name.split('-')[0].trim()}
                       secondary={
                         <>
                           <Typography component="span" variant="subtitle1">
