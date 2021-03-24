@@ -20,25 +20,9 @@ export default function App() {
   const classes = useStyles();
   const [list, setList] = useState([]);
   const [sources, setSources] = useState([]);
+  const [resorts, setResorts] = useState([]);
   const [filter, setFilter] = useState('');
   const [resort, setResort] = useState('');
-
-  const resorts = [
-    'Animal Kingdom',
-    'Bay Lake Tower',
-    'Aulani Resort',
-    'Beach Club Villas',
-    'Boardwalk Villas',
-    'Copper Creek',
-    'Grand Californian Hotel & Spa',
-    'Old Key West',
-    'Saratoga Springs',
-    'Vero Beach',
-    'Boulder Ridge Villas',
-    'Polynesian Villas and Bungalows',
-    'Hilton Head',
-    'Riviera Resort',
-  ];
 
   const useYear = [
     'January',
@@ -83,6 +67,20 @@ export default function App() {
       .then((json) => {
         setSources(json);
       });
+
+    fetch('http://localhost:5150/resort', {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .catch((error) => {
+        console.log(error);
+      })
+      .then((res) => res.json())
+      .then((json) => {
+        setResorts(json);
+      });
   }, []);
 
   return (
@@ -100,8 +98,8 @@ export default function App() {
                 <em>None</em>
               </MenuItem>
               {resorts.map((resort) => (
-                <MenuItem key={resort} value={resort}>
-                  {resort}
+                <MenuItem key={resort.id} value={resort.name}>
+                  {resort.name}
                 </MenuItem>
               ))}
             </Select>
@@ -133,7 +131,7 @@ export default function App() {
                 if (!resort) {
                   return true;
                 }
-                return r.name.split('-')[0].trim() === resort;
+                return r.name === resort;
               })
               .filter((l) => {
                 if (!filter) {
@@ -145,7 +143,7 @@ export default function App() {
                 return (
                   <ListItem key={listing.id}>
                     <ListItemText
-                      primary={listing.name.split('-')[0].trim()}
+                      primary={listing.name}
                       secondary={
                         <>
                           <Typography component="span" variant="subtitle1">
