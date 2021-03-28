@@ -10,6 +10,8 @@ ReactDOM.render(
       domain="roamdevelopment.auth0.com"
       clientId="eCq5edMoL2IKUwRi0NyZAnZexfopHlDC"
       redirectUri={window.location.origin}
+      useRefreshTokens={true}
+      cacheLocation={'localstorage'}
     >
       <App />
     </Auth0Provider>

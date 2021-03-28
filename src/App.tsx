@@ -17,6 +17,7 @@ import {
 } from '@material-ui/core';
 import { Fragment, useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+import { ListingRow } from './components/Listing/ListingRow';
 
 export default function App() {
   const classes = useStyles();
@@ -50,7 +51,7 @@ export default function App() {
     'December',
   ];
 
-  const handlePointRangeChange = (event, newValue) => {
+  const handlePointRangeChange = (event: any, newValue: any) => {
     setPointsRange(newValue);
   };
 
@@ -64,7 +65,7 @@ export default function App() {
       .catch((error) => {
         console.log(error);
       })
-      .then((res) => res.json())
+      .then((res: any) => res.json())
       .then((json) => {
         setList(json);
       });
@@ -78,7 +79,7 @@ export default function App() {
       .catch((error) => {
         console.log(error);
       })
-      .then((res) => res.json())
+      .then((res: any) => res.json())
       .then((json) => {
         setSources(json);
       });
@@ -92,7 +93,7 @@ export default function App() {
       .catch((error) => {
         console.log(error);
       })
-      .then((res) => res.json())
+      .then((res: any) => res.json())
       .then((json) => {
         setResorts(json);
       });
@@ -142,12 +143,12 @@ export default function App() {
             <Select
               label="Resorts"
               value={resort}
-              onChange={(e) => setResort(e.target.value)}
+              onChange={(e: any) => setResort(e.target.value)}
             >
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              {resorts.map((resort) => (
+              {resorts.map((resort: any) => (
                 <MenuItem key={resort.id} value={resort.id}>
                   {resort.name}
                 </MenuItem>
@@ -161,12 +162,12 @@ export default function App() {
             <Select
               label="Use Year"
               value={filter}
-              onChange={(e) => setFilter(e.target.value)}
+              onChange={(e: any) => setFilter(e.target.value)}
             >
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              {useYear.map((year) => (
+              {useYear.map((year: any) => (
                 <MenuItem key={year} value={year}>
                   {year}
                 </MenuItem>
@@ -180,12 +181,12 @@ export default function App() {
             <Select
               label="Sites"
               value={source}
-              onChange={(e) => setSource(e.target.value)}
+              onChange={(e: any) => setSource(e.target.value)}
             >
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              {sources.slice(0, 3).map((source) => (
+              {sources.slice(0, 3).map((source: any) => (
                 <MenuItem key={source.id} value={source.id}>
                   {source.name}
                 </MenuItem>
@@ -233,67 +234,34 @@ export default function App() {
       </Grid>
       <Grid container>
         <Grid item>
-          <List>
-            {list
-              .filter((r) => {
-                if (!resort) {
-                  return true;
-                }
-                return r.resort.id === resort;
-              })
-              .filter((s) => {
-                if (!source) {
-                  return true;
-                }
-                return s.source.id === source;
-              })
-              .filter((l) => {
-                if (!filter) {
-                  return true;
-                }
-                return l.useYear.trim() === filter;
-              })
-              .filter((l) => {
-                if (!pointsRange) {
-                  return true;
-                }
-                return l.points >= pointsRange[0] && l.points <= pointsRange[1];
-              })
-              .map((listing, i) => {
-                return (
-                  <Fragment key={listing.id}>
-                    <ListItem dense>
-                      <ListItemText
-                        primary={listing.name}
-                        secondary={
-                          <>
-                            <Typography component="span" variant="subtitle1">
-                              {listing.useYear}
-                            </Typography>
-                            {' | '}
-                            <Typography component="span" variant="body1">
-                              {listing.price}
-                            </Typography>
-                            {' | '}
-                            <Typography component="span" variant="body1">
-                              {listing.points}
-                            </Typography>
-
-                            <Typography component="p" variant="body2">
-                              {listing.description}
-                            </Typography>
-                            <Typography component="p">
-                              {new Date(listing.updatedAt).toDateString()}
-                            </Typography>
-                          </>
-                        }
-                      />
-                    </ListItem>
-                    <Divider variant="inset" component="li" />
-                  </Fragment>
-                );
-              })}
-          </List>
+          {list
+            .filter((r: any) => {
+              if (!resort) {
+                return true;
+              }
+              return r.resort.id === resort;
+            })
+            .filter((s: any) => {
+              if (!source) {
+                return true;
+              }
+              return s.source.id === source;
+            })
+            .filter((l: any) => {
+              if (!filter) {
+                return true;
+              }
+              return l.useYear.trim() === filter;
+            })
+            .filter((l: any) => {
+              if (!pointsRange) {
+                return true;
+              }
+              return l.points >= pointsRange[0] && l.points <= pointsRange[1];
+            })
+            .map((listing: any, i: number) => {
+              return <ListingRow key={i} {...listing} />;
+            })}
         </Grid>
       </Grid>
     </Container>
