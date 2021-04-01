@@ -2,17 +2,15 @@ import {
   Button,
   Container,
   createStyles,
-  Divider,
   FormControl,
+  FormControlLabel,
   Grid,
   InputLabel,
-  List,
-  ListItem,
-  ListItemText,
   makeStyles,
   MenuItem,
   Select,
   Slider,
+  Switch,
   Typography,
 } from '@material-ui/core';
 import { Fragment, useEffect, useState } from 'react';
@@ -35,6 +33,7 @@ export default function App() {
   const [resort, setResort] = useState('');
   const [source, setSource] = useState('');
   const [pointsRange, setPointsRange] = useState([0, 2000]);
+  const [pending, setPending] = useState<boolean>(false);
 
   const useYear = [
     'January',
@@ -175,7 +174,7 @@ export default function App() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item style={{ flex: 1 }}>
+        <Grid item>
           <FormControl className={classes.formControl} variant="outlined">
             <InputLabel>Sites</InputLabel>
             <Select
@@ -194,6 +193,20 @@ export default function App() {
             </Select>
           </FormControl>
         </Grid>
+        <Grid item>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={pending}
+                onChange={() => setPending(!pending)}
+                name="pending"
+                color="primary"
+              />
+            }
+            label="pending"
+          />
+        </Grid>
+        <Grid item style={{ flex: 1 }}></Grid>
         {isAuthenticated ? (
           <>
             <Grid item>
@@ -235,6 +248,12 @@ export default function App() {
       <Grid container>
         <Grid item>
           {list
+            .filter((sp: any) => {
+              if (pending) {
+                return true;
+              }
+              return sp.price !== 'Sale pending';
+            })
             .filter((r: any) => {
               if (!resort) {
                 return true;
