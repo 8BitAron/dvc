@@ -3,17 +3,22 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import { Auth0Provider } from '@auth0/auth0-react';
 import reportWebVitals from './reportWebVitals';
+import { Provider } from 'react-redux';
+import { store } from './app/store';
 
 ReactDOM.render(
   <React.StrictMode>
     <Auth0Provider
-      domain="roamdevelopment.auth0.com"
-      clientId="eCq5edMoL2IKUwRi0NyZAnZexfopHlDC"
+      domain=""
+      clientId=""
+      audience=""
       redirectUri={window.location.origin}
       useRefreshTokens={true}
       cacheLocation={'localstorage'}
     >
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </Auth0Provider>
   </React.StrictMode>,
   document.getElementById('root')

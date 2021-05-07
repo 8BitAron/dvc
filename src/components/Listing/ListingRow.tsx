@@ -20,6 +20,7 @@ interface ListingRowProps {
   updatedAt: Date;
   source: any;
   link: string;
+  resort: any;
 }
 
 export const ListingRow: FC<ListingRowProps> = (props) => {
@@ -27,7 +28,7 @@ export const ListingRow: FC<ListingRowProps> = (props) => {
     <Card>
       <CardHeader
         avatar={<Avatar>{props.points}</Avatar>}
-        title={props.name}
+        title={props.resort.name}
         subheader={`${props.useYear} | $${props.price}`}
       />
       <CardContent>

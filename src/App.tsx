@@ -20,6 +20,7 @@ import { ListingRow } from './components/Listing/ListingRow';
 export default function App() {
   const classes = useStyles();
   const {
+    getAccessTokenSilently,
     loginWithRedirect,
     isAuthenticated,
     logout,
@@ -55,19 +56,26 @@ export default function App() {
   };
 
   useEffect(() => {
-    fetch('http://localhost:5150/listing', {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .catch((error) => {
-        console.log(error);
-      })
-      .then((res: any) => res.json())
-      .then((json) => {
-        setList(json);
-      });
+    (async () => {
+      if (isAuthenticated) {
+        const token = await getAccessTokenSilently();
+        console.log(token);
+        fetch('http://localhost:5150/listing', {
+          method: 'get',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token,
+          },
+        })
+          .catch((error) => {
+            console.log(error);
+          })
+          .then((res: any) => res.json())
+          .then((json) => {
+            setList(json);
+          });
+      }
+    })();
 
     fetch('http://localhost:5150/source', {
       method: 'get',
@@ -96,7 +104,7 @@ export default function App() {
       .then((json) => {
         setResorts(json);
       });
-  }, []);
+  }, [isAuthenticated]);
 
   const marks = [
     {
@@ -247,40 +255,41 @@ export default function App() {
       </Grid>
       <Grid container>
         <Grid item>
-          {list
-            .filter((sp: any) => {
-              if (pending) {
-                return true;
-              }
-              return sp.price !== 'Sale pending';
-            })
-            .filter((r: any) => {
-              if (!resort) {
-                return true;
-              }
-              return r.resort.id === resort;
-            })
-            .filter((s: any) => {
-              if (!source) {
-                return true;
-              }
-              return s.source.id === source;
-            })
-            .filter((l: any) => {
-              if (!filter) {
-                return true;
-              }
-              return l.useYear.trim() === filter;
-            })
-            .filter((l: any) => {
-              if (!pointsRange) {
-                return true;
-              }
-              return l.points >= pointsRange[0] && l.points <= pointsRange[1];
-            })
-            .map((listing: any, i: number) => {
-              return <ListingRow key={i} {...listing} />;
-            })}
+          {list.length > 0 &&
+            list
+              .filter((sp: any) => {
+                if (pending) {
+                  return true;
+                }
+                return sp.price !== 'Sale pending';
+              })
+              .filter((r: any) => {
+                if (!resort) {
+                  return true;
+                }
+                return r.resort.id === resort;
+              })
+              .filter((s: any) => {
+                if (!source) {
+                  return true;
+                }
+                return s.source.id === source;
+              })
+              .filter((l: any) => {
+                if (!filter) {
+                  return true;
+                }
+                return l.useYear.trim() === filter;
+              })
+              .filter((l: any) => {
+                if (!pointsRange) {
+                  return true;
+                }
+                return l.points >= pointsRange[0] && l.points <= pointsRange[1];
+              })
+              .map((listing: any, i: number) => {
+                return <ListingRow key={i} {...listing} />;
+              })}
         </Grid>
       </Grid>
     </Container>
