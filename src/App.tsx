@@ -143,6 +143,7 @@ export default function App() {
 
   return (
     <Container maxWidth="xl">
+      <div>Points Ranges</div>
       <Grid container spacing={2} alignItems="center">
         <Grid item>
           <FormControl className={classes.formControl} variant="outlined">
